@@ -1,45 +1,51 @@
-# 🏥 Respiratory AI — Frontend (React)
+# 🧠 Respiratory AI — Backend (FastAPI)
 
-This is the interactive dashboard for the Respiratory AI diagnostic platform. It provides clinical professionals with real-time audio analysis, history tracking, and diagnostic report generation.
+The high-performance core of the Respiratory AI platform. This service handles audio preprocessing, AI model inference, and secure user management.
 
 ## 🚀 Getting Started
 
-### 1. Install Dependencies
+### 1. Virtual Environment
 ```bash
-npm install
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Unix
+source venv/bin/activate
 ```
 
-### 2. Configure Environment
-The app automatically detects your environment:
-- **Development**: Connects to `http://localhost:8000`
-- **Production**: Connects to the Render backend URL.
-
-### 3. Start Development Server
+### 2. Install Dependencies
 ```bash
-npm start
+pip install -r requirements.txt
 ```
 
-## ✨ Features
+### 3. Start Server
+```bash
+uvicorn app.main:app --reload --port 8000
+```
 
-- **📊 Clinical Dashboard**: Comprehensive overview of respiratory screenings.
-- **🎙️ Live Recording**: Real-time waveform visualization during audio capture.
-- **🌍 Multi-Language**: English, Spanish, Hindi, and Telugu support via custom translation engine.
-- **🌗 Dark Mode**: Premium dark theme with Framer Motion transitions.
-- **📄 PDF Reports**: Automated generation of clinical findings.
-- **🔐 Protected Routes**: Secure access via JWT and persistent session management.
+## 🏗️ Technical Architecture
 
-## 🛠️ Tech Stack
+### 🎙️ Audio Processing Pipeline
+1. **Dynamic Decoding**: Uses `soundfile` for high-speed WAV/FLAC processing.
+2. **Signal Enhancement**: Applies Butterworth high-pass filtering (100Hz) to isolate lung sounds.
+3. **Spectrogram Generation**: Computes DB-scale Mel-spectrograms for AI consumption.
 
-- **React 18**
-- **Framer Motion** (Animations)
-- **Lucide React** (Iconography)
-- **Tailwind CSS** (Styling)
-- **jsPDF** (Reporting)
-- **Axios** (API Requests)
+### 🤖 AI Model
+- **Architecture**: EfficientNet-B0 with a custom classification head.
+- **Training**: Dual-stage SSL (Self-Supervised Learning) pre-training.
+- **Inference**: Optimized with multi-threaded Torch and `inference_mode`.
 
-## 📁 Structure
+### 🔐 Security Model
+- **Auth**: JWT-based authentication with Argon2 password hashing.
+- **RBAC**: Role-Based Access Control (Admin/User).
+- **Validation**: Strict Pydantic schemas for all request/response bodies.
 
-- `/src/pages`: Main view components (Dashboard, Login, Signup).
-- `/src/services`: API integration layer.
-- `/src/utils`: Authentication, translation, and formatting helpers.
-- `/src/components`: Reusable UI elements (Buttons, Cards, Modals).
+## 🔌 API Documentation
+- **Interactive Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Alternative (ReDoc)**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+## 📁 Key Directories
+- `/app/api`: Endpoint routing logic.
+- `/app/services`: Audio engineering and ML inference code.
+- `/app/models`: Database schema definitions (SQLAlchemy).
+- `/ml`: Model training and evaluation scripts.
